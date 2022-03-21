@@ -20,6 +20,12 @@ const computerPaddle = document.querySelector('.computer-paddle');
 let computerPaddleYPosition;
 let computerPaddleYVelocity;
 
+// Get the User paddle element
+const userPaddle = document.querySelector('.player-paddle');
+
+// The Y Position of the User Paddle
+let userPaddleYPosition;
+
 // Get the bal element
 const ball = document.querySelector('.ball');
 
@@ -38,25 +44,46 @@ let ballYVelocity;
 // Boolean for who is starting
 let computerStart;
 
+// Boolean for Computer Paddle Direction
+let computerPaddleUp;
+
+// Boolean for direction ball is going
+let ballTowardComputer;
+
 /*/////////////////////////*/
 /*/////   FUNCTIONS   /////*/
 /*/////////////////////////*/
 
 // Intialize Function
-function gameStart(){
+function initialize(){
+    computerPaddleYPosition = getComputerPaddlePosition();
+    ballTowardComputer = false;
+    userPaddleYPosition = '200'
+    startGame();
+}
+
+// Start Game Function
+function startGame(){
 
     // The y postion & velocity of the computer paddle
-    computerPaddleYPosition = getComputerPaddlePosition();
     computerPaddle.style.top = `${computerPaddleYPosition}px`;
     computerPaddleYVelocity = getRandomVelocity();
+    if (computerPaddleYVelocity > 0){
+        computerPaddleUp === true;
+    } else {
+        computerPaddleUp === false;
+    }
+
+    // The y position of user paddle
+    userPaddle.style.top = `${userPaddleYPosition}px`;
     
     // The x & y position & velocity of the ball at gameStart
     ballXPosition = 660;
     ball.style.left = `${ballXPosition}px`;
-    if (computerStart === true){
-        ballXVelocity = -1
+    if (ballTowardComputer === true){
+        ballXVelocity = 1
     } else {
-        ballXVelocity = 1;
+        ballXVelocity = -1;
     }
      
     ballYPostion = getBallStartPosition() + computerPaddleYPosition;
@@ -100,11 +127,11 @@ function update() {
 
     //Restart the Game if the ball go past left or right boundary
     if (ballXPosition <= 0){
-        gameStart();
+        startGame();
     }
 
     if (ballXPosition >= 700){
-        gameStart();
+        startGame();
     }
 
     //Bounce the ball if the ball hits top or bottom boundary
@@ -139,13 +166,45 @@ function getBallStartPosition(){
     return getRandomNumber(101)
 }
 
-/*/////////////////////////*/
-/*/////   RUN CODE.   /////*/
-/*/////////////////////////*/
+// I THOUGHT I NEEDED TO DO SOME TRIG OR SOMETHING WITH ANGLES BUT MAYBE I DON'T???
+// function getBallYVelocity(pos){
+//     pos = Math.abs(pos - 50);
+//     pos = ((pos/50)*2)+Math.random();
+//     console.log(pos);
+//     return pos
+// }
+
+// function getBallXAngle(pos){
+//     if (pos === 0)
+// }
+
+/*///////////////////////////////*/
+/*/////   Event Listeners   /////*/
+/*///////////////////////////////*/
+
+window.addEventListener("keydown", function(event){
+    if (event.defaultPrevented){
+        return;
+    }
+    switch (event.key){
+        case "ArrowDown":
+            // Do Something
+            break;
+        case "ArrowUp":
+            // Do Something
+            break;
+        default:
+            return;
+    }
+    event.preventDefault();
+}, true);
+
+/*////////////////////////*/
+/*/////   RUN CODE   /////*/
+/*////////////////////////*/
 
 // Start of the Game
-computerStart = true;
-gameStart();
+initialize();
 
 // Call the update() function every 35ms
 setInterval(update, 35);
