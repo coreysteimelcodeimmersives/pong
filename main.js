@@ -24,6 +24,18 @@ function update() {
 
     // Apply the y-position 
     computerPaddle.style.top = `${computerPaddleYPosition}px`;
+
+    // Send the Paddle Back Up after it reaches the bottom of the Game Area
+    if (computerPaddleYPosition >= 400){
+        computerPaddleYPosition = 400;
+        computerPaddleYVelocity = -1;
+    }
+
+    // Send the Paddle Back Down after it reaches the top of the Game Area
+    if (computerPaddleYPosition <= 0){
+        computerPaddleYPosition = 0;
+        computerPaddleYVelocity = 1;
+    }
 }
 
 // Call the update() function every 35ms
