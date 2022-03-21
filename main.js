@@ -142,6 +142,10 @@ function update() {
     if (ballYPostion >= 480){
         ballYVelocity = -1;
     }
+
+    //Bounce the ball if the ball hits User Paddle
+    // first get the y range of the paddle
+    // if (ballYPostion <= userPaddleYPosition && )
     
 }
 
@@ -183,18 +187,15 @@ function getBallStartPosition(){
 /*///////////////////////////////*/
 
 window.addEventListener("keydown", function(event){
-    if (event.defaultPrevented){
-        return;
-    }
-    switch (event.key){
-        case "ArrowDown":
-            // Do Something
-            break;
-        case "ArrowUp":
-            // Do Something
-            break;
-        default:
-            return;
+    console.log('working?')
+    // if(event.defaultPrevented){
+    //     return;
+    // }
+    // do things
+    if (event.key === "ArrowDown"){
+        console.log('arrowDown');
+    } else if (event.ky === "ArrowUp"){
+        console.log('arrowUp');
     }
     event.preventDefault();
 }, true);
