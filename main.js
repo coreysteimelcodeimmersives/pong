@@ -63,7 +63,6 @@ function gameStart(){
     ball.style.top = `${ballYPostion}px`;
     ballYVelocity = getRandomVelocity();
     
-    
 }
 
 // Update the pong world
