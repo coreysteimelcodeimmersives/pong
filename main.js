@@ -170,7 +170,7 @@ function update() {
         ballYVelocity = 2;
     }
 
-    if (ballYPostion >= 480){
+    if (ballYPostion >= 470){
         ballYVelocity = -2;
     }
 
