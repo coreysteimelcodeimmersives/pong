@@ -51,12 +51,20 @@ let computerPaddleUp;
 // Boolean for User Paddle Direction
 let userPaddleUp;
 
+// You Score 
+let youScoreText = document.querySelector('#you');
+let youScore;
+
+// Computer Score DOM
+let computerScoreText = document.querySelector('#computer');
+let computerScore;
+
 /*/////////////////////////*/
 /*/////   FUNCTIONS   /////*/
 /*/////////////////////////*/
 
 // Ball Function
-function sendBall(xPos, xVel, paddleDir){
+function sendBall(xPos, xVel, paddleDir, paddlePostion){
     //Ball Position at Start and velocity
     ballXPosition = xPos;
     ballXVelocity = xVel;
@@ -67,12 +75,15 @@ function sendBall(xPos, xVel, paddleDir){
     }
 
     // The x & y position & velocity of the ball at gameStart
-    ballYPostion = getBallStartPosition() + computerPaddleYPosition;
+    ballYPostion = getBallStartPosition() + paddlePostion;
     ball.style.top = `${ballYPostion}px`;
 }
 
 // Intialize Function
 function initialize(){
+
+    youScore = 0;
+    computerScore = 0;
 
     // The y position of user paddle
     userPaddleYPosition = 200;
@@ -88,12 +99,24 @@ function initialize(){
         computerPaddleUp = true;
     }
     
-    sendBall(658, -2, computerPaddleUp);
+    sendBall(658, -2, computerPaddleUp, computerPaddleYPosition);
 
 }
 
 // Update the pong world
 function update() {
+
+    // if (ballXVelocity === -2){
+    //     computerPaddleYVelocity = 0;
+    // }
+
+    // if (ballXVelocity === 2 && ballYPostion > 350){
+    //     if (ballYVelocity === -2){
+    //         computerPaddleYVelocity = -2;
+    //     } else {
+    //         computerPaddleYVelocity = 2;
+    //     }
+    // }
 
     // Update the computer paddle's position
     computerPaddleYPosition = computerPaddleYPosition + computerPaddleYVelocity;
@@ -128,12 +151,18 @@ function update() {
     ball.style.top = `${ballYPostion}px`;
 
     //Restart the Game if the ball go past left or right boundary
+    // Comp Scores a Point
     if (ballXPosition === 0){
-        sendBall(658, -2, computerPaddleUp);
+        computerScore += 1;
+        computerScoreText.innerText = `Computer: ${computerScore}`;
+        sendBall(658, -2, computerPaddleUp, computerPaddleYPosition);
     }
 
+    // You Scores a Point
     if (ballXPosition >= 700){
-        sendBall(22, 2, userPaddleUp);
+        youScore += 1;
+        youScoreText.innerText = `You: ${youScore}`
+        sendBall(22, 2, userPaddleUp, userPaddleYPosition);
     }
 
     //Bounce the ball if the ball hits top or bottom boundary

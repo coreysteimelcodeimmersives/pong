@@ -5,6 +5,21 @@ body {
     margin: 0;
     background-color: #333;
     height: 100vh;
+    flex-direction: column
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1{
+    color: darkgoldenrod;
+}
+
+h3{
+    color: darkgoldenrod;
 }
 
 .game-area {
@@ -38,5 +53,12 @@ body {
 
 .computer-paddle {
     right: 0;
+}
+
+.score-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 700px;
 }
 
