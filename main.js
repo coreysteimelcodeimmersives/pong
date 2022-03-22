@@ -23,8 +23,9 @@ let computerPaddleYVelocity;
 // Get the User paddle element
 const userPaddle = document.querySelector('.player-paddle');
 
-// The Y Position of the User Paddle
+// The Y Position and Velocity of the User Paddle
 let userPaddleYPosition;
+let userPaddleYVelocity;
 
 // Get the bal element
 const ball = document.querySelector('.ball');
@@ -47,6 +48,9 @@ let computerStart;
 // Boolean for Computer Paddle Direction
 let computerPaddleUp;
 
+// Boolean for User Paddle Direction
+let userPaddleUp;
+
 // Boolean for direction ball is going
 let ballTowardComputer;
 
@@ -58,7 +62,7 @@ let ballTowardComputer;
 function initialize(){
     computerPaddleYPosition = getComputerPaddlePosition();
     ballTowardComputer = false;
-    userPaddleYPosition = '200'
+    userPaddleYPosition = 200;
     startGame();
 }
 
@@ -81,9 +85,9 @@ function startGame(){
     ballXPosition = 660;
     ball.style.left = `${ballXPosition}px`;
     if (ballTowardComputer === true){
-        ballXVelocity = 1
+        ballXVelocity = 2
     } else {
-        ballXVelocity = -1;
+        ballXVelocity = -2;
     }
      
     ballYPostion = getBallStartPosition() + computerPaddleYPosition;
@@ -136,16 +140,31 @@ function update() {
 
     //Bounce the ball if the ball hits top or bottom boundary
     if (ballYPostion <= 0){
-        ballYVelocity = 1;
+        ballYVelocity = 2;
     }
 
     if (ballYPostion >= 480){
-        ballYVelocity = -1;
+        ballYVelocity = -2;
     }
 
     //Bounce the ball if the ball hits User Paddle
+    if (ballXPosition === 20 && ballYPostion >= userPaddleYPosition && ballYPostion <= (userPaddleYPosition + 100)){
+        ballXVelocity = 2;
+        if (userPaddleUp === true){
+            ballYVelocity = -2;
+        } else{
+            ballYVelocity = 2;
+        }
+    }
+
+    
     // first get the y range of the paddle
-    // if (ballYPostion <= userPaddleYPosition && )
+    if (ballYPostion <= userPaddleYPosition && ballYPostion >= (userPaddleYPosition + 100) && ballXPosition === 20){
+        ballXVelocity = 1;
+        if (userPaddleUp === true){
+            ballYVelocity = -1;
+        }
+    }
     
 }
 
@@ -160,14 +179,33 @@ function getComputerPaddlePosition(){
 function getRandomVelocity(){
     let computerVelocity = getRandomNumber(2);
     if(computerVelocity === 1){
-        return 1;
+        return 2;
     } else {
-        return -1;
+        return -2;
     }
 }
 
 function getBallStartPosition(){
     return getRandomNumber(101)
+}
+
+function userArrow(event){
+    if (event.key === 'ArrowUp'){
+        if (userPaddleYPosition >= 1){
+            userPaddleUp = true;
+            userPaddleYVelocity = -5;
+            userPaddleYPosition = userPaddleYPosition + userPaddleYVelocity;
+            userPaddle.style.top = `${userPaddleYPosition}px`;
+        }
+    } else if (event.key === 'ArrowDown'){
+        if (userPaddleYPosition <= 399){
+            userPaddleUp = false;
+            userPaddleYVelocity = 5;
+            userPaddleYPosition = userPaddleYPosition + userPaddleYVelocity;
+            userPaddle.style.top = `${userPaddleYPosition}px`;
+
+        }
+    }
 }
 
 // I THOUGHT I NEEDED TO DO SOME TRIG OR SOMETHING WITH ANGLES BUT MAYBE I DON'T???
@@ -186,19 +224,7 @@ function getBallStartPosition(){
 /*/////   Event Listeners   /////*/
 /*///////////////////////////////*/
 
-window.addEventListener("keydown", function(event){
-    console.log('working?')
-    // if(event.defaultPrevented){
-    //     return;
-    // }
-    // do things
-    if (event.key === "ArrowDown"){
-        console.log('arrowDown');
-    } else if (event.ky === "ArrowUp"){
-        console.log('arrowUp');
-    }
-    event.preventDefault();
-}, true);
+window.addEventListener("keydown", userArrow);
 
 /*////////////////////////*/
 /*/////   RUN CODE   /////*/
