@@ -51,49 +51,45 @@ let computerPaddleUp;
 // Boolean for User Paddle Direction
 let userPaddleUp;
 
-// Boolean for direction ball is going
-let ballTowardComputer;
-
 /*/////////////////////////*/
 /*/////   FUNCTIONS   /////*/
 /*/////////////////////////*/
 
-// Intialize Function
-function initialize(){
-    computerPaddleYPosition = getComputerPaddlePosition();
-    ballTowardComputer = false;
-    userPaddleYPosition = 200;
-    startGame();
+// Ball Function
+function sendBall(xPos, xVel, paddleDir){
+    //Ball Position at Start and velocity
+    ballXPosition = xPos;
+    ballXVelocity = xVel;
+    if (paddleDir === true){
+        ballYVelocity = -2;
+    } else {
+        ballYVelocity = 2;
+    }
+
+    // The x & y position & velocity of the ball at gameStart
+    ballYPostion = getBallStartPosition() + computerPaddleYPosition;
+    ball.style.top = `${ballYPostion}px`;
 }
 
-// Start Game Function
-function startGame(){
+// Intialize Function
+function initialize(){
+
+    // The y position of user paddle
+    userPaddleYPosition = 200;
+    userPaddle.style.top = `${userPaddleYPosition}px`;
 
     // The y postion & velocity of the computer paddle
+    computerPaddleYPosition = getComputerPaddlePosition();
     computerPaddle.style.top = `${computerPaddleYPosition}px`;
     computerPaddleYVelocity = getRandomVelocity();
     if (computerPaddleYVelocity > 0){
-        computerPaddleUp === true;
+        computerPaddleUp = false;
     } else {
-        computerPaddleUp === false;
+        computerPaddleUp = true;
     }
+    
+    sendBall(658, -2, computerPaddleUp);
 
-    // The y position of user paddle
-    userPaddle.style.top = `${userPaddleYPosition}px`;
-    
-    // The x & y position & velocity of the ball at gameStart
-    ballXPosition = 660;
-    ball.style.left = `${ballXPosition}px`;
-    if (ballTowardComputer === true){
-        ballXVelocity = 2
-    } else {
-        ballXVelocity = -2;
-    }
-     
-    ballYPostion = getBallStartPosition() + computerPaddleYPosition;
-    ball.style.top = `${ballYPostion}px`;
-    ballYVelocity = getRandomVelocity();
-    
 }
 
 // Update the pong world
@@ -108,13 +104,15 @@ function update() {
     // Send the Paddle Back Up after it reaches the bottom of the Game Area
     if (computerPaddleYPosition >= 400){
         computerPaddleYPosition = 400;
-        computerPaddleYVelocity = -1;
+        computerPaddleYVelocity = -5;
+        computerPaddleUp = true;
     }
 
     // Send the Paddle Back Down after it reaches the top of the Game Area
     if (computerPaddleYPosition <= 0){
         computerPaddleYPosition = 0;
-        computerPaddleYVelocity = 1;
+        computerPaddleYVelocity = 5;
+        computerPaddleUp = false;
     }
 
     // Update the ball x velocity
@@ -130,12 +128,12 @@ function update() {
     ball.style.top = `${ballYPostion}px`;
 
     //Restart the Game if the ball go past left or right boundary
-    if (ballXPosition <= 0){
-        startGame();
+    if (ballXPosition === 0){
+        sendBall(658, -2, computerPaddleUp);
     }
 
     if (ballXPosition >= 700){
-        startGame();
+        sendBall(22, 2, userPaddleUp);
     }
 
     //Bounce the ball if the ball hits top or bottom boundary
@@ -157,12 +155,13 @@ function update() {
         }
     }
 
-    
-    // first get the y range of the paddle
-    if (ballYPostion <= userPaddleYPosition && ballYPostion >= (userPaddleYPosition + 100) && ballXPosition === 20){
-        ballXVelocity = 1;
-        if (userPaddleUp === true){
-            ballYVelocity = -1;
+    //Bounde the ball if the ball hits the computer paddle
+    if (ballXPosition === 660 && ballYPostion >= computerPaddleYPosition && ballYPostion <= (computerPaddleYPosition + 100)){
+        ballXVelocity = -2;
+        if (computerPaddleUp === true){
+            ballYVelocity = -2;
+        } else {
+            ballYVelocity = 2;
         }
     }
     
@@ -179,9 +178,9 @@ function getComputerPaddlePosition(){
 function getRandomVelocity(){
     let computerVelocity = getRandomNumber(2);
     if(computerVelocity === 1){
-        return 2;
+        return 5;
     } else {
-        return -2;
+        return -5;
     }
 }
 
